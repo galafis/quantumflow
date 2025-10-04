@@ -1,9 +1,9 @@
 use crate::utils::types::{OrderBookLevel, OrderBookSnapshot, Ticker};
 use anyhow::{Context, Result};
 use chrono::Utc;
-use futures::{SinkExt, StreamExt};
+use futures::StreamExt;
 use rust_decimal::Decimal;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::str::FromStr;
 use tokio::net::TcpStream;
 use tokio_tungstenite::{connect_async, MaybeTlsStream, WebSocketStream};
@@ -12,6 +12,7 @@ use tracing::{error, info};
 #[derive(Debug, Deserialize)]
 struct BinanceDepthUpdate {
     #[serde(rename = "e")]
+    #[allow(dead_code)]
     event_type: String,
     #[serde(rename = "s")]
     symbol: String,
@@ -24,6 +25,7 @@ struct BinanceDepthUpdate {
 #[derive(Debug, Deserialize)]
 struct BinanceTickerUpdate {
     #[serde(rename = "e")]
+    #[allow(dead_code)]
     event_type: String,
     #[serde(rename = "s")]
     symbol: String,

@@ -1,6 +1,6 @@
 use clap::{Parser, Subcommand};
 use quantumflow::{
-    backtest::engine::{BacktestEngine, OHLCV},
+    backtest::engine::BacktestEngine,
     connectors::binance::BinanceConnector,
     engine::matching::MatchingEngine,
     risk::manager::{RiskLimits, RiskManager},

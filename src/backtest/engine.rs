@@ -1,8 +1,7 @@
-use crate::utils::types::{Order, OrderType, Side, Trade};
+use crate::utils::types::{Side, Trade};
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
