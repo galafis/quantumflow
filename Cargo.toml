@@ -1,0 +1,57 @@
+[package]
+name = "quantumflow"
+version = "1.0.0"
+edition = "2021"
+authors = ["Gabriel Demetrios Lafis"]
+description = "High-frequency trading engine with ultra-low latency and multi-exchange connectivity"
+license = "MIT"
+repository = "https://github.com/gabriellafis/quantumflow"
+keywords = ["trading", "hft", "finance", "cryptocurrency", "orderbook"]
+categories = ["finance", "asynchronous"]
+
+[dependencies]
+tokio = { version = "1.40", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tungstenite = "0.24"
+tokio-tungstenite = "0.24"
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+rust_decimal = { version = "1.36", features = ["serde-float"] }
+thiserror = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dashmap = "6.1"
+crossbeam = "0.8"
+parking_lot = "0.12"
+once_cell = "1.20"
+uuid = { version = "1.11", features = ["v4", "serde"] }
+reqwest = { version = "0.12", features = ["json"] }
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+url = "2.5"
+futures = "0.3"
+clap = { version = "4.5", features = ["derive"] }
+config = "0.14"
+csv = "1.3"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+mockito = "1.5"
+tokio-test = "0.4"
+
+[[bench]]
+name = "orderbook_bench"
+harness = false
+
+[[bench]]
+name = "matching_engine_bench"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true

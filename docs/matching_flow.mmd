@@ -1,0 +1,27 @@
+sequenceDiagram
+    participant Client
+    participant MatchingEngine
+    participant RiskManager
+    participant OrderBook
+    participant TradeStream
+
+    Client->>MatchingEngine: Submit Order
+    MatchingEngine->>RiskManager: Check Risk Limits
+    
+    alt Risk Check Failed
+        RiskManager-->>MatchingEngine: Reject
+        MatchingEngine-->>Client: Order Rejected
+    else Risk Check Passed
+        RiskManager-->>MatchingEngine: Approve
+        MatchingEngine->>OrderBook: Match Order
+        
+        alt No Match Found
+            OrderBook-->>MatchingEngine: Add to Book
+            MatchingEngine-->>Client: Order Open
+        else Match Found
+            OrderBook-->>MatchingEngine: Execute Trades
+            MatchingEngine->>TradeStream: Publish Trades
+            MatchingEngine->>RiskManager: Update Position
+            MatchingEngine-->>Client: Order Filled
+        end
+    end
