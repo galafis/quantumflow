@@ -11,17 +11,16 @@
 
 ### 🚀 Overview
 
-**QuantumFlow** is a professional-grade high-frequency trading (HFT) engine built in Rust, designed for ultra-low latency order execution and real-time market data processing. It features a complete matching engine, risk management system, and multi-exchange connectivity.
+**QuantumFlow** is a high-frequency trading (HFT) engine built in Rust, designed for low-latency order execution and real-time market data processing. It includes a matching engine, risk management system, and exchange connectivity via WebSocket.
 
 ### ✨ Key Features
 
-- **Ultra-Low Latency**: Sub-millisecond order matching with optimized data structures
-- **Multi-Exchange Support**: WebSocket connectors for Binance, Coinbase, and Kraken
-- **Advanced Matching Engine**: FIFO price-time priority with partial fill support
-- **Real-Time Risk Management**: Position limits, circuit breakers, and P&L tracking
-- **Backtesting Framework**: Historical data simulation with performance metrics
-- **Async Architecture**: Built on Tokio for maximum concurrency
-- **Type-Safe**: Leverages Rust's type system for financial precision (Decimal types)
+- **Low-Latency Matching**: FIFO price-time priority order matching with partial fill support
+- **Binance Connectivity**: WebSocket connector for real-time market data streaming
+- **Risk Management**: Position limits, circuit breakers, and P&L tracking
+- **Backtesting**: Historical data simulation with performance metrics (Sharpe, drawdown, win rate)
+- **Async Runtime**: Built on Tokio for concurrent order processing
+- **Decimal Precision**: Uses `rust_decimal` for accurate financial arithmetic
 
 ### 🏗️ Architecture
 
@@ -29,9 +28,9 @@
 
 The system is organized into modular layers:
 
-1. **Connectors Layer**: WebSocket connections to external exchanges
+1. **Connectors Layer**: WebSocket connection to Binance
 2. **Core Engine**: Order book management and matching logic
-3. **Risk Management**: Real-time position tracking and limit enforcement
+3. **Risk Management**: Position tracking and limit enforcement
 4. **Analytics**: Backtesting and performance analysis
 
 ### 📊 Matching Flow
@@ -149,18 +148,15 @@ if let Err(e) = risk_manager.check_order(&order) {
 
 ### ⚙️ Configuration
 
-Risk limits and trading parameters can be configured in `config.toml`:
+Risk limits are configured programmatically via `RiskLimits`:
 
-```toml
-[risk]
-max_order_size = 10.0
-max_position_size = 100.0
-max_daily_loss = 10000.0
-max_leverage = 5.0
-
-[engine]
-matching_algorithm = "fifo"
-enable_partial_fills = true
+```rust
+let limits = RiskLimits {
+    max_order_size: Decimal::from(10),
+    max_position_size: Decimal::from(100),
+    max_daily_loss: Decimal::from(10000),
+    max_leverage: Decimal::from(5),
+};
 ```
 
 ### 🧪 Testing
@@ -176,19 +172,15 @@ cargo test -- --nocapture
 cargo test test_orderbook_add_and_match
 ```
 
-**Test Results**: ✅ 10/10 passing
+### 📈 Benchmarks
 
-### 📈 Performance Benchmarks
+Run benchmarks on your own hardware:
 
 ```bash
 cargo bench
 ```
 
-| Operation | Throughput | Latency (p99) |
-|-----------|------------|---------------|
-| Order Submission | 50,000 ops/sec | 0.8ms |
-| Order Matching | 100,000 ops/sec | 0.5ms |
-| Order Book Snapshot | 10,000 ops/sec | 2.1ms |
+Benchmarks cover order submission, order matching, and order book snapshots using the `criterion` framework.
 
 ### 🗂️ Project Structure
 
@@ -216,8 +208,9 @@ quantumflow/
 ├── examples/
 │   └── simple_trading.rs     # Usage examples
 ├── docs/
-│   ├── architecture.md       # Architecture documentation
-│   └── images/               # Diagrams and charts
+│   ├── architecture.mmd      # Architecture diagram (Mermaid)
+│   ├── matching_flow.mmd     # Matching flow diagram (Mermaid)
+│   └── images/               # Rendered diagrams
 ├── Cargo.toml
 ├── LICENSE
 └── README.md
@@ -240,30 +233,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Business Intelligence / Business Analyst
 - Data Analyst & Data Scientist
 
-### 🔗 Related Projects
-
-- [AlphaForge](https://github.com/gabriellafis/alphaforge) - ML Trading Bot
-- [SecureVault](https://github.com/gabriellafis/securevault) - Crypto Custody System
-- [MarketPulse](https://github.com/gabriellafis/marketpulse) - Real-Time Analytics Platform
-- [RiskGuard](https://github.com/gabriellafis/riskguard) - Advanced Risk Management
-
 ---
 
 ## Português
 
 ### 🚀 Visão Geral
 
-**QuantumFlow** é um motor de negociação de alta frequência (HFT) de nível profissional construído em Rust, projetado para execução de ordens com latência ultra-baixa e processamento de dados de mercado em tempo real. Possui um motor de correspondência completo, sistema de gestão de risco e conectividade com múltiplas exchanges.
+**QuantumFlow** é um motor de negociação de alta frequência (HFT) construído em Rust, projetado para execução de ordens com baixa latência e processamento de dados de mercado em tempo real. Possui um motor de correspondência, sistema de gestão de risco e conectividade com exchange via WebSocket.
 
 ### ✨ Principais Recursos
 
-- **Latência Ultra-Baixa**: Correspondência de ordens em sub-milissegundos com estruturas de dados otimizadas
-- **Suporte Multi-Exchange**: Conectores WebSocket para Binance, Coinbase e Kraken
-- **Motor de Correspondência Avançado**: Prioridade FIFO preço-tempo com suporte a preenchimento parcial
-- **Gestão de Risco em Tempo Real**: Limites de posição, circuit breakers e rastreamento de P&L
-- **Framework de Backtesting**: Simulação com dados históricos e métricas de desempenho
-- **Arquitetura Assíncrona**: Construído sobre Tokio para máxima concorrência
-- **Type-Safe**: Aproveita o sistema de tipos do Rust para precisão financeira (tipos Decimal)
+- **Correspondência de Baixa Latência**: Prioridade FIFO preço-tempo com suporte a preenchimento parcial
+- **Conectividade com Binance**: Conector WebSocket para streaming de dados de mercado em tempo real
+- **Gestão de Risco**: Limites de posição, circuit breakers e rastreamento de P&L
+- **Backtesting**: Simulação com dados históricos e métricas de desempenho (Sharpe, drawdown, win rate)
+- **Runtime Assíncrono**: Construído sobre Tokio para processamento concorrente de ordens
+- **Precisão Decimal**: Usa `rust_decimal` para aritmética financeira precisa
 
 ### 🏗️ Arquitetura
 
@@ -271,9 +256,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 O sistema é organizado em camadas modulares:
 
-1. **Camada de Conectores**: Conexões WebSocket com exchanges externas
+1. **Camada de Conectores**: Conexão WebSocket com a Binance
 2. **Motor Principal**: Gerenciamento de livro de ordens e lógica de correspondência
-3. **Gestão de Risco**: Rastreamento de posições em tempo real e aplicação de limites
+3. **Gestão de Risco**: Rastreamento de posições e aplicação de limites
 4. **Analytics**: Backtesting e análise de desempenho
 
 ### 📊 Fluxo de Correspondência
@@ -335,19 +320,15 @@ cargo test
 cargo test -- --nocapture
 ```
 
-**Resultados dos Testes**: ✅ 10/10 aprovados
+### 📈 Benchmarks
 
-### 📈 Benchmarks de Desempenho
+Execute os benchmarks no seu próprio hardware:
 
 ```bash
 cargo bench
 ```
 
-| Operação | Taxa de Transferência | Latência (p99) |
-|----------|----------------------|----------------|
-| Submissão de Ordem | 50.000 ops/seg | 0,8ms |
-| Correspondência de Ordem | 100.000 ops/seg | 0,5ms |
-| Snapshot do Livro de Ordens | 10.000 ops/seg | 2,1ms |
+Os benchmarks cobrem submissão de ordens, correspondência de ordens e snapshots do livro de ordens usando o framework `criterion`.
 
 ### 📄 Licença
 

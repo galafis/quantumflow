@@ -1,14 +1,10 @@
 graph TB
     subgraph "External Data Sources"
         BINANCE[Binance WebSocket]
-        COINBASE[Coinbase API]
-        KRAKEN[Kraken API]
     end
 
     subgraph "Connectors Layer"
         BC[Binance Connector]
-        CC[Coinbase Connector]
-        KC[Kraken Connector]
     end
 
     subgraph "Core Engine"
@@ -26,29 +22,20 @@ graph TB
     subgraph "Analytics & Backtesting"
         BT[Backtest Engine]
         PERF[Performance Metrics]
-        REPORT[Report Generator]
     end
 
-    subgraph "API & CLI"
+    subgraph "CLI"
         CLI[Command Line Interface]
-        REST[REST API]
-        WS[WebSocket Server]
     end
 
     BINANCE -->|Market Data| BC
-    COINBASE -->|Market Data| CC
-    KRAKEN -->|Market Data| KC
 
     BC --> OB
-    CC --> OB
-    KC --> OB
 
     OB --> ME
     ME --> TS
     
     CLI --> ME
-    REST --> ME
-    WS --> ME
 
     ME --> RM
     RM --> POS
@@ -56,7 +43,6 @@ graph TB
 
     TS --> BT
     BT --> PERF
-    PERF --> REPORT
 
     style ME fill:#ff6b6b
     style RM fill:#4ecdc4

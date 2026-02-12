@@ -169,14 +169,49 @@ async fn run_backtest(file: &str) -> anyhow::Result<()> {
 
     let mut engine = BacktestEngine::new(Decimal::from(100000));
 
-    // Load sample data (simplified)
-    let prices = vec![
-        Decimal::from(50000),
-        Decimal::from(50500),
-        Decimal::from(51000),
-        Decimal::from(50800),
-        Decimal::from(51200),
-    ];
+    // Try to load prices from CSV file
+    let prices: Vec<Decimal> = match std::fs::File::open(file) {
+        Ok(reader) => {
+            let mut rdr = csv::ReaderBuilder::new()
+                .has_headers(true)
+                .from_reader(reader);
+
+            let mut loaded_prices = Vec::new();
+            for result in rdr.records() {
+                if let Ok(record) = result {
+                    // Expect "close" price in column index 4 (timestamp,open,high,low,close,volume)
+                    if let Some(close_str) = record.get(4) {
+                        if let Ok(price) = close_str.trim().parse::<Decimal>() {
+                            loaded_prices.push(price);
+                        }
+                    }
+                }
+            }
+            if loaded_prices.is_empty() {
+                info!("No valid price data found in CSV, using sample data");
+                vec![
+                    Decimal::from(50000),
+                    Decimal::from(50500),
+                    Decimal::from(51000),
+                    Decimal::from(50800),
+                    Decimal::from(51200),
+                ]
+            } else {
+                info!("Loaded {} price points from CSV", loaded_prices.len());
+                loaded_prices
+            }
+        }
+        Err(e) => {
+            info!("Could not open {}: {}. Using sample data.", file, e);
+            vec![
+                Decimal::from(50000),
+                Decimal::from(50500),
+                Decimal::from(51000),
+                Decimal::from(50800),
+                Decimal::from(51200),
+            ]
+        }
+    };
 
     for (i, price) in prices.iter().enumerate() {
         if i % 2 == 0 {
