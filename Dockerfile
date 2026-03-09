@@ -15,6 +15,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 COPY --from=builder /app/target/release/quantumflow /app/quantumflow
 
-EXPOSE 8080
-
-CMD ["/app/quantumflow"]
+ENTRYPOINT ["/app/quantumflow"]
+CMD ["demo"]

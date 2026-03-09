@@ -1,9 +1,15 @@
+//! Core domain types shared across the trading engine.
+//!
+//! Defines the fundamental data structures for orders, trades,
+//! market data, and order book representations.
+
 use chrono::{DateTime, Utc};
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use uuid::Uuid;
 
+/// Side of an order: buy or sell.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Side {
     Buy,
@@ -19,14 +25,20 @@ impl fmt::Display for Side {
     }
 }
 
+/// Type of order determining execution semantics.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderType {
+    /// Limit order: executes at the specified price or better.
     Limit,
+    /// Market order: executes immediately at the best available price.
     Market,
+    /// Stop-limit order: becomes a limit order when the stop price is reached.
     StopLimit,
+    /// Stop-market order: becomes a market order when the stop price is reached.
     StopMarket,
 }
 
+/// Lifecycle status of an order.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum OrderStatus {
     Pending,
@@ -37,6 +49,7 @@ pub enum OrderStatus {
     Rejected,
 }
 
+/// Represents a trading order with all metadata required for matching.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Order {
     pub id: Uuid,
@@ -52,6 +65,7 @@ pub struct Order {
 }
 
 impl Order {
+    /// Creates a new order with a random UUID and `Pending` status.
     pub fn new(
         symbol: String,
         side: Side,
@@ -73,15 +87,18 @@ impl Order {
         }
     }
 
+    /// Returns the quantity that has not yet been filled.
     pub fn remaining_quantity(&self) -> Decimal {
         self.quantity - self.filled_quantity
     }
 
+    /// Returns `true` if the order has been completely filled.
     pub fn is_fully_filled(&self) -> bool {
         self.filled_quantity >= self.quantity
     }
 }
 
+/// Represents a completed trade between a buyer and a seller.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Trade {
     pub id: Uuid,
@@ -94,6 +111,7 @@ pub struct Trade {
 }
 
 impl Trade {
+    /// Creates a new trade record with a random UUID.
     pub fn new(
         symbol: String,
         price: Decimal,
@@ -113,6 +131,7 @@ impl Trade {
     }
 }
 
+/// Real-time ticker data from an exchange.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Ticker {
     pub symbol: String,
@@ -123,12 +142,14 @@ pub struct Ticker {
     pub timestamp: DateTime<Utc>,
 }
 
+/// A single price level in an order book with aggregated quantity.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OrderBookLevel {
     pub price: Decimal,
     pub quantity: Decimal,
 }
 
+/// Point-in-time snapshot of an order book with top bid/ask levels.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OrderBookSnapshot {
     pub symbol: String,
