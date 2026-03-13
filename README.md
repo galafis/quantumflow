@@ -8,6 +8,7 @@
 [![Tokio](https://img.shields.io/badge/Tokio-1.40-FE6100.svg)](https://tokio.rs/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker)](Dockerfile)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker)](Dockerfile)
 
 [English](#english) | [Portugues (BR)](#portugues-br)
 
