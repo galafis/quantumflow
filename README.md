@@ -4,11 +4,10 @@
 
 > Motor de negociacao de alta frequencia construido em Rust com matching de ordens de ultra-baixa latencia, streaming de dados de mercado em tempo real, gestao de risco e capacidades de backtesting historico.
 
-[![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584.svg?logo=rust)](https://www.rust-lang.org/)
-[![Tokio](https://img.shields.io/badge/Tokio-1.40-FE6100.svg)](https://tokio.rs/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker)](Dockerfile)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker)](Dockerfile)
+![Rust](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![License-MIT](https://img.shields.io/badge/License--MIT-yellow?style=for-the-badge)
+
 
 [English](#english) | [Portugues (BR)](#portugues-br)
 
